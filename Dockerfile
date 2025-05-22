@@ -5,7 +5,7 @@ FROM cnstark/pytorch:2.0.1-py3.9.17-cuda11.8.0-ubuntu20.04
 # FROM nvidia/cuda:12.9.0-devel-ubuntu22.04 AS base
 
 # FROM base AS base-amd64
-FROM base-${TARGETARCH}
+# FROM base-${TARGETARCH}
 
 # LABEL maintainer="breakstring@hotmail.com"
 LABEL version="dev-20240209"
@@ -43,7 +43,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Define a build-time argument for image type
 ARG IMAGE_TYPE=full
-ARG TARGETARCH
+# ARG TARGETARCH
 
 # Conditional logic based on the IMAGE_TYPE argument
 # Always copy the Docker directory, but only use it if IMAGE_TYPE is not "elite"
