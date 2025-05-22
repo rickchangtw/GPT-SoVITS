@@ -1,0 +1,38 @@
+groups:
+  - name: docker
+    rules:
+      - alert: ContainerDown
+        expr: container_memory_usage_bytes{container="gpt-sovits-container"} == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "GPT-SoVITS 容器已停止運行"
+          description: "容器 {{ $labels.container }} 已停止運行超過 5 分鐘"
+
+      - alert: HighMemoryUsage
+        expr: container_memory_usage_bytes{container="gpt-sovits-container"} > 14000000000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "容器內存使用率過高"
+          description: "容器 {{ $labels.container }} 內存使用率超過 14GB"
+
+      - alert: GPUUtilizationHigh
+        expr: nvidia_gpu_utilization > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "GPU 使用率過高"
+          description: "GPU 使用率超過 90% 持續 5 分鐘"
+
+      - alert: ContainerRestarting
+        expr: changes(container_start_time_seconds{container="gpt-sovits-container"}[5m]) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "容器頻繁重啟"
+          description: "容器 {{ $labels.container }} 在 5 分鐘內重啟超過 2 次" 

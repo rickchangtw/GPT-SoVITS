@@ -11,7 +11,7 @@ FROM cnstark/pytorch:2.0.1-py3.9.17-cuda11.8.0-ubuntu20.04
 LABEL version="dev-20240209"
 LABEL description="Docker image for GPT-SoVITS"
 LABEL maintainer="NVIDIA CORPORATION <cudatools@nvidia.com>"
-LABEL com.nvidia.cudnn.version="${NV_CUDNN_VERSION}"
+# LABEL com.nvidia.cudnn.version="${NV_CUDNN_VERSION}"Q
 
 # Install 3rd party apps
 ENV DEBIAN_FRONTEND=noninteractive

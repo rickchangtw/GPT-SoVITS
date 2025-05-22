@@ -1,0 +1,60 @@
+name: Docker 環境檢查
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'  # 每天執行一次
+
+jobs:
+  check-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 檢查 Docker 配置
+        run: |
+          if [ -f "docker-compose.yaml" ]; then
+            docker-compose config
+          else
+            echo "錯誤：找不到 docker-compose.yaml 文件"
+            exit 1
+          fi
+
+      - name: 檢查 GPU 配置
+        run: |
+          if ! grep -q "driver: nvidia" docker-compose.yaml; then
+            echo "錯誤：docker-compose.yaml 中缺少 NVIDIA GPU 配置"
+            exit 1
+          fi
+
+      - name: 檢查端口配置
+        run: |
+          required_ports=(9880 9871 9872 9873 9874)
+          for port in "${required_ports[@]}"; do
+            if ! grep -q "$port:" docker-compose.yaml; then
+              echo "錯誤：缺少端口 $port 配置"
+              exit 1
+            fi
+          done
+
+      - name: 檢查環境變量
+        run: |
+          if ! grep -q "is_half" docker-compose.yaml; then
+            echo "警告：缺少 is_half 環境變量配置"
+          fi
+          if ! grep -q "is_share" docker-compose.yaml; then
+            echo "警告：缺少 is_share 環境變量配置"
+          fi
+
+      - name: 檢查卷配置
+        run: |
+          required_volumes=("output" "logs" "SoVITS_weights" "reference")
+          for volume in "${required_volumes[@]}"; do
+            if ! grep -q "$volume:" docker-compose.yaml; then
+              echo "錯誤：缺少 $volume 卷配置"
+              exit 1
+            fi
+          done 
