@@ -1,6 +1,6 @@
 # Base CUDA image
-#FROM cnstark/pytorch:2.0.1-py3.9.17-cuda11.8.0-ubuntu20.04
-FROM nvidia/cuda:12.9.0-devel-ubuntu22.04 AS base
+FROM cnstark/pytorch:2.0.1-py3.9.17-cuda11.8.0-ubuntu20.04
+# FROM nvidia/cuda:12.9.0-devel-ubuntu22.04 AS base
 # FROM ${IMAGE_NAME}:12.9.0-devel-ubuntu20.04 AS base
 # FROM nvidia/cuda:12.9.0-devel-ubuntu22.04 AS base
 
