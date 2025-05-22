@@ -23,11 +23,11 @@ ENV NV_CUDNN_PACKAGE=libcudnn9-cuda-12=${NV_CUDNN_VERSION}
 ENV NV_CUDNN_PACKAGE_DEV=libcudnn9-dev-cuda-12=${NV_CUDNN_VERSION}
 
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ${NV_CUDNN_PACKAGE} \
-    ${NV_CUDNN_PACKAGE_DEV} \
-    && apt-mark hold ${NV_CUDNN_PACKAGE_NAME}
-    # && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     ${NV_CUDNN_PACKAGE} \
+#     ${NV_CUDNN_PACKAGE_DEV} \
+#     && apt-mark hold ${NV_CUDNN_PACKAGE_NAME}
+#     # && rm -rf /var/lib/apt/lists/*
 
 
 RUN apt-get update && \
