@@ -25,8 +25,8 @@ ENV NV_CUDNN_PACKAGE_DEV=libcudnn9-dev-cuda-12=${NV_CUDNN_VERSION}
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ${NV_CUDNN_PACKAGE} \
     ${NV_CUDNN_PACKAGE_DEV} \
-    && apt-mark hold ${NV_CUDNN_PACKAGE_NAME} \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-mark hold ${NV_CUDNN_PACKAGE_NAME}
+    # && rm -rf /var/lib/apt/lists/*
 
 
 RUN apt-get update && \
@@ -37,8 +37,8 @@ RUN apt-get update && \
 # Copy only requirements.txt initially to leverage Docker cache
 WORKDIR /workspace
 COPY requirements.txt /workspace/
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --upgrade pip
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Define a build-time argument for image type
 ARG IMAGE_TYPE=full
