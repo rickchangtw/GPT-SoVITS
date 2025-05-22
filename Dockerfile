@@ -1,7 +1,8 @@
 # Base CUDA image
 #FROM cnstark/pytorch:2.0.1-py3.9.17-cuda11.8.0-ubuntu20.04
-FROM nvidia/cuda:12.9.0-devel-ubuntu20.04 AS base
+FROM nvidia/cuda:12.9.0-devel-ubuntu22.04 AS base
 # FROM ${IMAGE_NAME}:12.9.0-devel-ubuntu20.04 AS base
+# FROM nvidia/cuda:12.9.0-devel-ubuntu22.04 AS base
 
 FROM base AS base-amd64
 FROM base-${TARGETARCH}
@@ -30,15 +31,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3-pip tzdata ffmpeg libsox-dev parallel aria2 git git-lfs && \
+    apt-get install -y --no-install-recommends tzdata ffmpeg libsox-dev parallel aria2 git git-lfs && \
     git lfs install && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy only requirements.txt initially to leverage Docker cache
 WORKDIR /workspace
 COPY requirements.txt /workspace/
-RUN pip3 install --upgrade pip
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Define a build-time argument for image type
 ARG IMAGE_TYPE=full
