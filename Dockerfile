@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends tzdata ffmpeg libsox-dev parallel aria2 git git-lfs && \
+    apt-get install -y --no-install-recommends python3 python3-pip tzdata ffmpeg libsox-dev parallel aria2 git git-lfs && \
     git lfs install && \
     rm -rf /var/lib/apt/lists/*
 
