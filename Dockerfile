@@ -1,16 +1,34 @@
 # Base CUDA image
 #FROM cnstark/pytorch:2.0.1-py3.9.17-cuda11.8.0-ubuntu20.04
-FROM nvidia/cuda:12.3.2-cudnn9-ubuntu22.04
+FROM nvidia/cuda:12.9.0-devel-ubuntu20.04 AS base
+# FROM ${IMAGE_NAME}:12.9.0-devel-ubuntu20.04 AS base
 
+FROM base AS base-amd64
+FROM base-${TARGETARCH}
 
-LABEL maintainer="breakstring@hotmail.com"
+# LABEL maintainer="breakstring@hotmail.com"
 LABEL version="dev-20240209"
 LABEL description="Docker image for GPT-SoVITS"
-
+LABEL maintainer="NVIDIA CORPORATION <cudatools@nvidia.com>"
+LABEL com.nvidia.cudnn.version="${NV_CUDNN_VERSION}"
 
 # Install 3rd party apps
 ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Etc/UTC
+ENV TZ=Asia/Taipei
+
+ENV NV_CUDNN_VERSION=9.9.0.52-1
+ENV NV_CUDNN_PACKAGE_NAME=libcudnn9-cuda-12
+ENV NV_CUDNN_PACKAGE=libcudnn9-cuda-12=${NV_CUDNN_VERSION}
+ENV NV_CUDNN_PACKAGE_DEV=libcudnn9-dev-cuda-12=${NV_CUDNN_VERSION}
+
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ${NV_CUDNN_PACKAGE} \
+    ${NV_CUDNN_PACKAGE_DEV} \
+    && apt-mark hold ${NV_CUDNN_PACKAGE_NAME} \
+    && rm -rf /var/lib/apt/lists/*
+
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends tzdata ffmpeg libsox-dev parallel aria2 git git-lfs && \
     git lfs install && \
@@ -23,6 +41,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Define a build-time argument for image type
 ARG IMAGE_TYPE=full
+ARG TARGETARCH
 
 # Conditional logic based on the IMAGE_TYPE argument
 # Always copy the Docker directory, but only use it if IMAGE_TYPE is not "elite"
