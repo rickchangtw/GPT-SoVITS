@@ -7,7 +7,7 @@ runtime
 .idea
 output
 logs
-reference
+#reference
 GPT_weights
 SoVITS_weights
 GPT_weights_v2
